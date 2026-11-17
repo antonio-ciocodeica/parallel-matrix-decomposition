@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cholesky.h"
+#include "crout.h"
 #include "utils.h"
 
 int main(int argc, char *argv[]) {
@@ -28,6 +29,33 @@ int main(int argc, char *argv[]) {
 
     if (!write_matrix(L, argv[2], CHOLESKY_L_FILE)) {
         fprintf(stderr, "Could not write Cholesky L matrix to %s!\n", argv[2]);
+        return 1;
+    }
+
+    matrix_t *crout_L = allocate_matrix(input_matrix->size);
+    if (crout_L == NULL) {
+        fprintf(stderr, "Could not allocate matrix crout_L!\n");
+        return 1;
+    }
+
+    matrix_t *crout_U = allocate_matrix(input_matrix->size);
+    if (crout_U == NULL) {
+        fprintf(stderr, "Could not allocate matrix crout_U!\n");
+        return 1;
+    }
+
+    if (!crout(input_matrix, crout_L, crout_U)) {
+        fprintf(stderr, "Crout decomposition failed!\n");
+        return 1;
+    }
+
+    if (!write_matrix(crout_L, argv[2], CROUT_L_FILE)) {
+        fprintf(stderr, "Could not write Crout L matrix to %s!\n", argv[2]);
+        return 1;
+    }
+
+    if (!write_matrix(crout_U, argv[2], CROUT_U_FILE)) {
+        fprintf(stderr, "Could not write Crout U matrix to %s!\n", argv[2]);
         return 1;
     }
 

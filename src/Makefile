@@ -14,12 +14,13 @@ OUTPUT_DIR ?= ../output/serial
 
 build: $(BIN_DIR)/serial
 
-$(BIN_DIR)/serial: $(SERIAL_DIR)/main.o $(SERIAL_DIR)/cholesky.o $(UTILS_DIR)/utils.o
+$(BIN_DIR)/serial: $(SERIAL_DIR)/main.o $(SERIAL_DIR)/cholesky.o $(SERIAL_DIR)/crout.o $(UTILS_DIR)/utils.o
 	mkdir -p "$(BIN_DIR)"
 	$(CC) $^ -o $@ $(LDLIBS)
 
-$(SERIAL_DIR)/main.o: $(SERIAL_DIR)/cholesky.h $(UTILS_DIR)/utils.h
+$(SERIAL_DIR)/main.o: $(SERIAL_DIR)/cholesky.h $(SERIAL_DIR)/crout.h $(UTILS_DIR)/utils.h
 $(SERIAL_DIR)/cholesky.o: $(SERIAL_DIR)/cholesky.h $(UTILS_DIR)/utils.h
+$(SERIAL_DIR)/crout.o: $(SERIAL_DIR)/crout.h $(UTILS_DIR)/utils.h
 $(UTILS_DIR)/utils.o: $(UTILS_DIR)/utils.h
 
 %.o: %.c
